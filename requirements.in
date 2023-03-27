@@ -1,0 +1,6 @@
+# main
+jinja2
+
+# tools
+flake8
+pip-tools

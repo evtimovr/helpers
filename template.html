@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+	<meta charset="utf-8" />
+
+	<title>Лъжи</title>
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald%3Ai%2Cbi%2C700%2C300%2C400&display=swap" />
+</head>
+
+<body>
+	<style>
+		section.parties, section.liars {
+			margin-bottom: 20px;
+		}
+
+		section.parties a, section.liars a {
+			background-color: #202124;
+			color: white;
+			display: inline-block;
+			font-family: Oswald, sans-serif;
+			font-size: 20px;
+			font-weight: 300;
+			margin-right: 10px;
+			padding: 10px;
+			text-decoration: none;
+		}
+
+		section.parties a.selected, section.liars a.selected {
+			background-color: #cfe2f3;
+			color: black;
+		}
+
+		section.parties a.hidden, section.liars a.hidden {
+			display: none;
+		}
+
+		article.lie {
+			border-bottom: 1px solid rgb(95,99,104);
+			font-family: Oswald, sans-serif;
+			font-size: 20px;
+			font-weight: 300;
+			line-height: 1.56;
+			max-width: 1000px;
+		}
+
+		article.lie.hidden {
+			display: none;
+		}
+
+		article.lie dt {
+			text-transform: uppercase;
+		}
+
+		article.lie dd {
+			margin-bottom: 20px;
+		}
+	</style>
+
+	<section class="parties">
+	{% for party, liars in data | dictsort %}
+		<a href="#" title="{{ party }}" data-fn="select-party" data-party="{{ party }}">{{ party }}</a>
+	{% endfor %}
+	</section>
+
+	<section class="liars">
+	{% for party, liars in data | dictsort %}
+		{% for liar, items in liars | dictsort %}
+			<a href="#" title="{{ liar }}" class="hidden" data-fn="select-liar" data-party="{{ party }}" data-liar="{{ liar }}">{{ liar }}</a>
+		{% endfor %}
+	{% endfor %}
+	</section>
+
+	<section class="lies">
+	{% for party, liars in data | dictsort %}
+		{% for liar, items in liars | dictsort %}
+			{% for item in items %}
+				<article class="lie hidden" data-fn="lie" data-party="{{ party }}" data-liar="{{ liar }}">
+					<dl>
+						<dt>Предаване</dt>
+						<dd>
+							<strong>{{ item.show }}</strong>
+							&mdash; излъчено на {{ item.date }}
+							(<a href="{{ item.show_url }}" target="_blank">линк</a>)
+						</dd>
+
+						<dt>Гост</dt>
+						<dd><strong>{{ item.liar }}</strong> ({{ item.party }})</dd>
+
+						<dt>Минута на изказване</dt>
+						<dd>{{ item.minute }}</dd>
+
+						<dt>Невярно твърдение</dt>
+						<dd>{{ item.lie }}</dd>
+
+						<dt>Нашата аргументация</dt>
+						<dd>{{ item.argumentation }}</dd>
+
+						<dt>Източници</dt>
+						<dd>
+							<ul>
+							{% for source in item.sources %}
+								<li>
+									<a href="{{ source }}" target="_blank">{{ source }}</a>
+								</li>
+							{% endfor %}
+							</ul>
+						</dd>
+					</dl>
+				</article>
+			{% endfor %}
+		{% endfor %}
+	{% endfor %}
+	</section>
+
+	<script>
+		(function () {
+			const show = function (elem) {
+				elem.classList.remove('hidden');
+			};
+
+			const hide = function (elem) {
+				elem.classList.add('hidden');
+				elem.classList.remove('selected');
+			};
+
+			const select = function (elem) {
+				elem.classList.add('selected');
+			};
+
+			const deselect = function (elem) {
+				elem.classList.remove('selected');
+			};
+
+			const selectParty = function (party) {
+				document.querySelectorAll('a[data-fn=select-party]').forEach(deselect);
+				document.querySelectorAll('a[data-fn=select-party][data-party="'+ party +'"]').forEach(select);
+
+				document.querySelectorAll('a[data-fn=select-liar]').forEach(hide);
+				document.querySelectorAll('a[data-fn=select-liar][data-party="'+ party +'"]').forEach(show);
+
+				document.querySelectorAll('article[data-fn=lie]').forEach(hide);
+				document.querySelectorAll('article[data-fn=lie][data-party="'+ party +'"]').forEach(show);
+			};
+
+			const selectLiar = function (liar) {
+				document.querySelectorAll('a[data-fn=select-liar]').forEach(deselect);
+				document.querySelectorAll('a[data-fn=select-liar][data-liar="'+ liar +'"]').forEach(select);
+
+				document.querySelectorAll('article[data-fn=lie]').forEach(hide);
+				document.querySelectorAll('article[data-fn=lie][data-liar="'+ liar +'"]').forEach(show);
+			};
+
+			document.querySelectorAll('[data-fn=select-party]').forEach(function (elem) {
+				elem.addEventListener('click', function () {
+					selectParty(elem.dataset.party);
+				});
+			});
+
+			document.querySelectorAll('[data-fn=select-liar]').forEach(function (elem) {
+				elem.addEventListener('click', function () {
+					selectLiar(elem.dataset.liar);
+				});
+			});
+		})();
+	</script>
+</body>
+</html>
