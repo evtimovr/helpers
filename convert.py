@@ -29,11 +29,22 @@ def parse_csv(csv_path):
 
 def render_template(data, output_path):
     env = Environment(loader=FileSystemLoader('.'))
-
     template = env.get_template('template.html')
 
+    num_party_lies = {
+        party: sum(len(items) for items in liars.values())
+        for party, liars in data.items()
+    }
+
+    for liars in data.values():
+        index = 0
+        for liar in sorted(liars.keys()):
+            for item in liars[liar]:
+                index += 1
+                item['index'] = index
+
     with open(output_path, 'w') as f:
-        f.write(template.render(data=data))
+        f.write(template.render(data=data, num_party_lies=num_party_lies))
 
 
 if __name__ == '__main__':

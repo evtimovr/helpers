@@ -36,7 +36,7 @@
 		}
 
 		article.lie {
-			border-bottom: 1px solid rgb(95,99,104);
+			border-bottom: 5px solid rgb(95,99,104);
 			font-family: Oswald, sans-serif;
 			font-size: 20px;
 			font-weight: 300;
@@ -59,14 +59,24 @@
 
 	<section class="parties">
 	{% for party, liars in data | dictsort %}
-		<a href="#" title="{{ party }}" data-fn="select-party" data-party="{{ party }}">{{ party }}</a>
+		<a href="#"
+			title="Неверните твърдения на {{ party }}"
+			data-fn="select-party"
+			data-party="{{ party }}"
+			>{{ party }} ({{ num_party_lies[party] }})</a>
 	{% endfor %}
 	</section>
 
 	<section class="liars">
 	{% for party, liars in data | dictsort %}
 		{% for liar, items in liars | dictsort %}
-			<a href="#" title="{{ liar }}" class="hidden" data-fn="select-liar" data-party="{{ party }}" data-liar="{{ liar }}">{{ liar }}</a>
+			<a href="#"
+				title="Неверните твърдения на {{ liar }}"
+				class="hidden"
+				data-fn="select-liar"
+				data-party="{{ party }}"
+				data-liar="{{ liar }}"
+				>{{ liar }} ({{ items | length }})</a>
 		{% endfor %}
 	{% endfor %}
 	</section>
@@ -77,6 +87,9 @@
 			{% for item in items %}
 				<article class="lie hidden" data-fn="lie" data-party="{{ party }}" data-liar="{{ liar }}">
 					<dl>
+						<dt>Невярно твърдение #{{ item.index }}</dt>
+						<dd>{{ item.lie }}</dd>
+
 						<dt>Предаване</dt>
 						<dd>
 							<strong>{{ item.show }}</strong>
@@ -89,9 +102,6 @@
 
 						<dt>Минута на изказване</dt>
 						<dd>{{ item.minute }}</dd>
-
-						<dt>Невярно твърдение</dt>
-						<dd>{{ item.lie }}</dd>
 
 						<dt>Нашата аргументация</dt>
 						<dd>{{ item.argumentation }}</dd>
