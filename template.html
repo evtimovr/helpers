@@ -6,9 +6,7 @@
 	<title>Лъжи</title>
 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald%3Ai%2Cbi%2C700%2C300%2C400&display=swap" />
-</head>
 
-<body>
 	<style>
 		section.parties, section.liars {
 			margin-bottom: 20px;
@@ -21,7 +19,7 @@
 			font-family: Oswald, sans-serif;
 			font-size: 20px;
 			font-weight: 300;
-			margin-right: 10px;
+			margin: 0 10px 10px 0;
 			padding: 10px;
 			text-decoration: none;
 		}
@@ -56,7 +54,9 @@
 			margin-bottom: 20px;
 		}
 	</style>
+</head>
 
+<body>
 	<section class="parties">
 	{% for party, liars in data | dictsort %}
 		<a href="#"
@@ -162,13 +162,17 @@
 			};
 
 			document.querySelectorAll('[data-fn=select-party]').forEach(function (elem) {
-				elem.addEventListener('click', function () {
+				elem.addEventListener('click', function (e) {
+					e.preventDefault();
+
 					selectParty(elem.dataset.party);
 				});
 			});
 
 			document.querySelectorAll('[data-fn=select-liar]').forEach(function (elem) {
-				elem.addEventListener('click', function () {
+				elem.addEventListener('click', function (e) {
+					e.preventDefault();
+
 					selectLiar(elem.dataset.liar);
 				});
 			});
