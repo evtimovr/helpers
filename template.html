@@ -87,15 +87,15 @@
 			{% for item in items %}
 				<article class="lie hidden" data-fn="lie" data-party="{{ party }}" data-liar="{{ liar }}">
 					<dl>
-
-
+						<dt><strong>Невярно твърдение #{{ item.index }}</dt>
+   
 						<dt>Гост</dt>
 						<dd><strong>{{ item.liar }}</strong> ({{ item.party }})</dd>
 
 						<dt>Контекст на изказването</dt>
 						<dd>{{ item.context }}</dd>
 						
-						<dt>Невярно твърдение #{{ item.index }}</dt>
+						<dt><Tвърдение</dt>
 						<dd>{{ item.lie }}</dd>
 
 						<dt>Предаване</dt>
