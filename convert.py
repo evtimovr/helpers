@@ -11,8 +11,8 @@ def parse_csv(csv_path):
         reader = csv.DictReader(
             f,
             fieldnames=[
-                'show', 'date', 'show_url', 'liar', 'party', 'minute', 'lie',
-                'argumentation',
+                'show', 'date', 'show_url', 'liar', 'party', 'minute', 'lie', 'context'
+                'argumentation', 
             ],
             restkey='sources',
         )
